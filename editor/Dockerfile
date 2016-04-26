@@ -23,5 +23,7 @@ EXPOSE 80
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
 
+WORKDIR /data/swagger-editor-master
+
 CMD ["/bin/sh", "-c", "/run.sh"]
 
