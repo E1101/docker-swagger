@@ -12,19 +12,20 @@ FROM payam/nodejs
 MAINTAINER Payam Naderi <naderi.payam@gmail.com>
 
 RUN apt-get update && apt-get install -y --force-yes \
-      wget \
-      openjdk-7-jre \
+      nginx \
       unzip \
-    && wget https://github.com/swagger-api/swagger-ui/archive/master.zip \
-       && unzip -o ./master.zip -d /data && rm -rf ./master.zip \ 
-    && cd /data/swagger-ui-master/ && npm install --verbose 
+    && wget https://github.com/wordnik/swagger-ui/archive/master.zip \
+       && unzip -o ./master.zip -d /swagger && rm -rf ./master.zip \
+    && cd /swagger && mv ./swagger-ui-master/dist/* .
+
+ADD swagger /etc/nginx/sites-enabled/
+RUN rm -f /etc/nginx/sites-enabled/default \
+    && echo 'daemon off;' >> /etc/nginx/nginx.conf
 
 EXPOSE 80
 
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
-
-WORKDIR /data/swagger-ui-master
 
 CMD ["/bin/sh", "-c", "/run.sh"]
 
