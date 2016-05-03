@@ -19,6 +19,7 @@ ONBUILD RUN sed -i 's@<form @&display="none" @g' /swagger/index.html
 RUN apt-get update && apt-get install -y --force-yes \
       nginx \
       unzip \
+      wget \
     && wget https://github.com/wordnik/swagger-ui/archive/master.zip \
        && unzip -o ./master.zip -d /swagger && rm -rf ./master.zip \
     && cd /swagger && mv ./swagger-ui-master/dist/* .
