@@ -35,7 +35,7 @@ CMD ["/bin/sh", "-c", "/run.sh"]
 
 ONBUILD ADD ["swagger.json", "/swagger/"]
 ## explore swagger.json as default generating ui insruction file
-ONBUILD RUN sed '/server_name localhost;/a rewrite ^(.*)$ $1?url=/swagger.json? break;' \
+ONBUILD RUN sed -i '/server_name localhost;/a rewrite ^(.*)$ $1?url=/swagger.json? last;' \
             /etc/nginx/sites-enabled/swagger
 ## hide explore bar in ui
-ONBUILD RUN sed -i 's@<form @&display="none" @g' /swagger/index.html
+ONBUILD RUN sed -i 's@<form @&style="display:none" @g' /swagger/index.html
