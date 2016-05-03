@@ -1,15 +1,20 @@
 # --------------------------------------------------------------------
-# | Usage Rec:
-# |  
-# |   docker run --name web-app --publish 8080:80 --volume $(pwd):/var/www/html --detach payam/apache-php7
+# | EXPOSE 80
+# | SwaggerUI Source is under /swagger folder.
 # |
-# | Config Files: /etc/apache2/ 
-# |   we can mount conf files to this place with volumes 
+# | ONBUILD:
+# |    put swagger.json beside your Dockerfile, used this file as
+# |    source to generate api documentation.
 # |
-
-FROM payam/nodejs
+FROM ubuntu
 
 MAINTAINER Payam Naderi <naderi.payam@gmail.com>
+
+ONBUILD ADD ["swagger.json", "/swagger/"]
+## explore swagger.json as default generating ui insruction file
+ONBUILD RUN sed '/server_name localhost;/a rewrite ^(.*)$ $1?url=/swagger.json? break;' /etc/nginx/site-enabled/swagger
+## hide explore bar in ui
+ONBUILD RUN sed -i 's@<form @&display="none" @g' /swagger/index.html
 
 RUN apt-get update && apt-get install -y --force-yes \
       nginx \
@@ -27,5 +32,6 @@ EXPOSE 80
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
 
-CMD ["/bin/sh", "-c", "/run.sh"]
+WORKDIR /swagger
 
+CMD ["/bin/sh", "-c", "/run.sh"]
