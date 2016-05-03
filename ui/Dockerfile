@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --force-yes \
       nginx \
       unzip \
       wget \
-    && wget https://github.com/wordnik/swagger-ui/archive/master.zip \
+    && wget https://github.com/E1101/swagger-ui/archive/master.zip \
        && unzip -o ./master.zip -d /swagger && rm -rf ./master.zip \
     && cd /swagger && mv ./swagger-ui-master/dist/* .
 
@@ -35,7 +35,8 @@ CMD ["/bin/sh", "-c", "/run.sh"]
 
 ONBUILD ADD ["swagger.json", "/swagger/"]
 ## explore swagger.json as default generating ui insruction file
-ONBUILD RUN sed -i '/server_name localhost;/a rewrite ^(.*)$ $1?url=/swagger.json? last;' \
+ONBUILD RUN sed -i '/location \/ {/a rewrite ^(.*)$ $1?url=/swagger.json break;' \
             /etc/nginx/sites-enabled/swagger
+ONBUILD RUN sed -i 's/http:\/\/petstore.swagger.io\/v2\/swagger.json/\/swagger.json/g' /swagger/index.html
 ## hide explore bar in ui
 ONBUILD RUN sed -i 's@<form @&style="display:none" @g' /swagger/index.html
