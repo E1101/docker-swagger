@@ -14,7 +14,8 @@ RUN apt-get update && apt-get install -y --force-yes \
       nginx \
       unzip \
       wget \
-    && wget https://github.com/E1101/swagger-ui/archive/master.zip \
+    ## https://github.com/e1101/swagger-ui can be used as alternate template
+    && wget https://github.com/wordnik/swagger-ui/archive/master.zip \
        && unzip -o ./master.zip -d /swagger && rm -rf ./master.zip \
     && cd /swagger && mv ./swagger-ui-master/dist/* .
 
