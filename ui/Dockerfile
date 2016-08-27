@@ -5,7 +5,8 @@
 # | ONBUILD:
 # |    put swagger.json beside your Dockerfile, used this file as
 # |    source to generate api documentation.
-# |
+# | 
+# | payam/swagger-ui
 FROM ubuntu
 
 MAINTAINER Payam Naderi <naderi.payam@gmail.com>
